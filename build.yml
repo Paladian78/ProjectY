@@ -10,8 +10,8 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- script: 'cd mslearn-tailspin-spacegame-web'
-  displayName: 'enter the right directory'
+# - script: 'cd mslearn-tailspin-spacegame-web'
+#   displayName: 'enter the right directory'
 - task: UseDotNet@2
   displayName: 'Use .NET SDK 5.x'
   inputs:
