@@ -5,7 +5,7 @@ stages:
   jobs:
   - job: Build
     pool:
-      vmImage: 'ubuntu-20.04'
+      vmImage: 'windows-2022'
       demands:
       - npm
 
@@ -86,4 +86,5 @@ stages:
           azureSubscription: 'App connection'
           appType: 'webApp'
           WebAppName: 'dep-loy-app'
-          packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+          # packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+          Package: '$(System.ArtifactsDirectory)\**\*.zip'
