@@ -1,4 +1,4 @@
-
+[![Build Status](https://dev.azure.com/HJInfotech-Internship/ProjectY/_apis/build/status/ProjectY?branchName=dotnetapp1)](https://dev.azure.com/HJInfotech-Internship/ProjectY/_build/latest?definitionId=29&branchName=dotnetapp1)
 # Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
