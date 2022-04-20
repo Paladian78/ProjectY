@@ -74,4 +74,16 @@ stages:
     pool:
       vmImage: 'vs2017-win2016'
     steps:
-      -
+      - task: DownloadBuildArtifacts@1
+        inputs:
+          buildType: 'current'
+          downloadType: 'single'
+          downloadPath: '$(System.ArtifactsDirectory)'
+          artifactName: 'drop'
+      - task: AzureRmWebAppDeployment@4
+        inputs:
+          ConnectionType: 'AzureRM'
+          azureSubscription: 'App connection'
+          appType: 'webApp'
+          WebAppName: 'dep-loy-app'
+          packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
