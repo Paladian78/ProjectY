@@ -50,7 +50,7 @@ stages:
     - task: AzureMysqlDeployment@1
       displayName: Run MySQL initialization script
       inputs:
-        azureSubscription: 'Azure Connection'
+        azureSubscription: 'Azure for Students'
         serverName: '$(MySqlServer).mysql.database.azure.com'
         databaseName: 'alm'
         sqlUsername: $(MySqlUserName)@$(MySqlServer)
