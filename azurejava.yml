@@ -44,7 +44,7 @@ stages:
         buildContext: '$(build.artifactstagingdirectory)'
         repository: $(webRepository)
         dockerfile: $(dockerfilePath)
-        containerRegistry: 'Container Registry Connection'
+        containerRegistry: 'javaContainer'
         tags: |
           $(tag)
     - task: AzureMysqlDeployment@1
