@@ -1,1 +1,3 @@
-THIS IS THE DEFAULT MAIN BRANCH
+# A Hello World Spring Boot App
+
+A Hello World Spring Boot app.
