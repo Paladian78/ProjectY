@@ -11,7 +11,7 @@ variables:
   dockerfilePath: '$(Build.SourcesDirectory)/src/Dockerfile'
   webRepository: 'web'
   tag: '$(Build.BuildId)'
-  vmImageName: 'ubuntu-latest'
+  vmImageName: 'windows-latest'
 
 stages:
 - stage: Build
@@ -24,15 +24,15 @@ stages:
     variables:
     - group: Release
     steps:
-    # - task: Maven@3
-    #   displayName: 'Maven pom.xml'
-    #   inputs:
-    #     options: '-DskipITs --settings ./maven/settings.xml'
-    #     publishJUnitResults: false
     - task: Maven@3
-      displayName: 'Maven Package'
+      displayName: 'Maven pom.xml'
       inputs:
-        mavenPomFile: 'pom.xml'
+        options: '-DskipITs --settings ./maven/settings.xml'
+        publishJUnitResults: false
+    # - task: Maven@3
+    #   displayName: 'Maven Package'
+    #   inputs:
+    #     mavenPomFile: 'pom.xml'
     - task: CopyFiles@2
       displayName: Copy WAR file to staging directory
       inputs:
