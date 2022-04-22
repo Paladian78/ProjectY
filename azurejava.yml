@@ -30,15 +30,9 @@ stages:
     #     options: '-DskipITs --settings ./maven/settings.xml'
     #     publishJUnitResults: false
     - task: Maven@3
+      displayName: 'Maven Package'
       inputs:
         mavenPomFile: 'pom.xml'
-        publishJUnitResults: true
-        testResultsFiles: '**/surefire-reports/TEST-*.xml'
-        javaHomeOption: 'JDKVersion'
-        mavenVersionOption: 'Default'
-        mavenAuthenticateFeed: false
-        effectivePomSkip: false
-        sonarQubeRunAnalysis: false
     - task: CopyFiles@2
       displayName: Copy WAR file to staging directory
       inputs:
@@ -57,13 +51,20 @@ stages:
     #     containerRegistry: 'javaContainer'
     #     tags: |
     #       $(tag)
-    - task: Docker@2
+    # - task: Docker@2
+    #   inputs:
+    #     containerRegistry: 'javaContainer'
+    #     repository: 'ProjectY'
+    #     command: 'buildAndPush'
+    #     Dockerfile: '**/Dockerfile'
+    - task: DockerCompose@0
       inputs:
-        containerRegistry: 'javaContainer'
-        repository: 'ProjectY'
-        command: 'buildAndPush'
-        Dockerfile: '**/Dockerfile'
-    
+        containerregistrytype: 'Azure Container Registry'
+        azureSubscription: 'Javaazure connection'
+        azureContainerRegistry: '{"loginServer":"javacontainercicd11339.azurecr.io", "id" : "/subscriptions/03951b14-d082-4bfd-b04c-d7512e31610c/resourceGroups/java-containers-cicd-rg/providers/Microsoft.ContainerRegistry/registries/javacontainercicd11339"}'
+        dockerComposeFile: '**/docker-compose.yml'
+        action: 'Run a Docker Compose command'
+        dockerComposeCommand: 'buildAndPush'
     - task: AzureMysqlDeployment@1
       displayName: Run MySQL initialization script
       # inputs:
