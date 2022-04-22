@@ -33,48 +33,70 @@ stages:
     #   displayName: 'Maven Package'
     #   inputs:
     #     mavenPomFile: 'pom.xml'
-    - task: CopyFiles@2
-      displayName: Copy WAR file to staging directory
-      inputs:
-        sourceFolder: '$(build.sourcesdirectory)'
-        contents: |
-          target/myshuttledev*.war
-          *.sql
-        targetFolder: '$(build.artifactstagingdirectory)'
-    - task: Docker@2
-      displayName: Build and push Java container image to registry
-      inputs:
-        command: buildAndPush
-        buildContext: '$(build.artifactstagingdirectory)'
-        repository: $(webRepository)
-        dockerfile: $(dockerfilePath)
-        containerRegistry: 'javaContainer'
-        tags: |
-          $(tag)
-    # - task: Docker@2
+    # - task: CopyFiles@2
+    #   displayName: Copy WAR file to staging directory
     #   inputs:
-    #     containerRegistry: 'javaContainer'
-    #     repository: 'ProjectY'
-    #     command: 'buildAndPush'
-    #     Dockerfile: '**/Dockerfile'
-    
-    - task: AzureMysqlDeployment@1
-      displayName: Run MySQL initialization script
-      # inputs:
-      #   azureSubscription: 'Azure for Students'
-      #   serverName: '$(MySqlServer).mysql.database.azure.com'
-      #   databaseName: 'alm'
-      #   sqlUsername: $(MySqlUserName)@$(MySqlServer)
-      #   sqlPassword: $(MySqlPassword)
-      #   sqlFile: '- task: AzureMysqlDeployment@1
+    #     sourceFolder: '$(build.sourcesdirectory)'
+    #     contents: |
+    #       target/myshuttledev*.war
+    #       *.sql
+    #     targetFolder: '$(build.artifactstagingdirectory)'
+    - task: CopyFiles@2
+      displayName: 'Copy Files to artifact staging directory'
       inputs:
-        azureSubscription: 'Javaazure connection'
-        ServerName: 'java-container-cicd-11339.mysql.database.azure.com'
-        DatabaseName: 'alm'
-        SqlUsername: 'sysadmin'
-        SqlPassword: '$(MySqlPassword)'
-        TaskNameSelector: 'SqlTaskFile'
-        SqlFile: '$(Build.SourcesDirectory)/CreateMYSQLDB.sql'
+        SourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: '**/target/*.?(war|jar)'
+        TargetFolder: $(Build.ArtifactStagingDirectory)
+    - upload: $(Build.ArtifactStagingDirectory)
+      artifact: drop
+- stage: Deploy
+  displayName: Deploy Stage
+  jobs:
+  - job: DeployAzure
+    displayName: DeployonAzure
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+      - task: DownloadBuildArtifacts@1
+        inputs:
+          buildType: 'current'
+          downloadType: 'single'
+          artifactName: 'drop'
+          downloadPath: '$(System.ArtifactsDirectory)'
+    # - task: Docker@2
+    #   displayName: Build and push Java container image to registry
+    #   inputs:
+    #     command: buildAndPush
+    #     buildContext: '$(build.artifactstagingdirectory)'
+    #     repository: $(webRepository)
+    #     dockerfile: $(dockerfilePath)
+    #     containerRegistry: 'javaContainer'
+    #     tags: |
+    #       $(tag)
+    # # - task: Docker@2
+    # #   inputs:
+    # #     containerRegistry: 'javaContainer'
+    # #     repository: 'ProjectY'
+    # #     command: 'buildAndPush'
+    # #     Dockerfile: '**/Dockerfile'
+    
+    # - task: AzureMysqlDeployment@1
+    #   displayName: Run MySQL initialization script
+    #   # inputs:
+    #   #   azureSubscription: 'Azure for Students'
+    #   #   serverName: '$(MySqlServer).mysql.database.azure.com'
+    #   #   databaseName: 'alm'
+    #   #   sqlUsername: $(MySqlUserName)@$(MySqlServer)
+    #   #   sqlPassword: $(MySqlPassword)
+    #   #   sqlFile: '- task: AzureMysqlDeployment@1
+    #   inputs:
+    #     azureSubscription: 'Javaazure connection'
+    #     ServerName: 'java-container-cicd-11339.mysql.database.azure.com'
+    #     DatabaseName: 'alm'
+    #     SqlUsername: 'sysadmin'
+    #     SqlPassword: '$(MySqlPassword)'
+    #     TaskNameSelector: 'SqlTaskFile'
+    #     SqlFile: '$(Build.SourcesDirectory)/CreateMYSQLDB.sql'
         # IpDetectionMethod: 'AutoDetect''
 
 # - stage: Deploy
