@@ -69,7 +69,7 @@ stages:
           azureSubscription: 'Azure for Students (03951b14-d082-4bfd-b04c-d7512e31610c)'
           appType: 'webApp'
           WebAppName: 'nodejs-dploy'
-          packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+          packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.?(war|jar)'
     # - task: Docker@2
     #   displayName: Build and push Java container image to registry
     #   inputs:
