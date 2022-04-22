@@ -29,6 +29,7 @@ stages:
       inputs:
         options: '-DskipITs --settings ./maven/settings.xml'
         publishJUnitResults: false
+  
     - task: CopyFiles@2
       displayName: Copy WAR file to staging directory
       inputs:
@@ -37,25 +38,42 @@ stages:
           target/myshuttledev*.war
           *.sql
         targetFolder: '$(build.artifactstagingdirectory)'
+    # - task: Docker@2
+    #   displayName: Build and push Java container image to registry
+    #   inputs:
+    #     command: buildAndPush
+    #     buildContext: '$(build.artifactstagingdirectory)'
+    #     repository: $(webRepository)
+    #     dockerfile: $(dockerfilePath)
+    #     containerRegistry: 'javaContainer'
+    #     tags: |
+    #       $(tag)
     - task: Docker@2
-      displayName: Build and push Java container image to registry
       inputs:
-        command: buildAndPush
-        buildContext: '$(build.artifactstagingdirectory)'
-        repository: $(webRepository)
-        dockerfile: $(dockerfilePath)
         containerRegistry: 'javaContainer'
-        tags: |
-          $(tag)
+        repository: 'ProjectY'
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
+    
     - task: AzureMysqlDeployment@1
       displayName: Run MySQL initialization script
+      # inputs:
+      #   azureSubscription: 'Azure for Students'
+      #   serverName: '$(MySqlServer).mysql.database.azure.com'
+      #   databaseName: 'alm'
+      #   sqlUsername: $(MySqlUserName)@$(MySqlServer)
+      #   sqlPassword: $(MySqlPassword)
+      #   sqlFile: '- task: AzureMysqlDeployment@1
       inputs:
-        azureSubscription: 'Azure for Students'
-        serverName: '$(MySqlServer).mysql.database.azure.com'
-        databaseName: 'alm'
-        sqlUsername: $(MySqlUserName)@$(MySqlServer)
-        sqlPassword: $(MySqlPassword)
-        sqlFile: '$(Build.SourcesDirectory)/CreateMYSQLDB.sql'
+        azureSubscription: 'Javaazure connection'
+        ServerName: 'java-container-cicd-11339.mysql.database.azure.com'
+        DatabaseName: 'alm'
+        SqlUsername: 'sysadmin'
+        SqlPassword: '$(MySqlPassword)'
+        TaskNameSelector: 'SqlTaskFile'
+        SqlFile: '$(Build.SourcesDirectory)/CreateMYSQLDB.sql'
+        # IpDetectionMethod: 'AutoDetect''
+
 # - stage: Deploy
 #   displayName: 'Deploy Web App'
 #   dependsOn: Build
