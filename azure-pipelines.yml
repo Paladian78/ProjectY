@@ -1,6 +1,6 @@
 
 trigger:
-- master
+- terraapp
 
 pool:
   name: 'Hosted VS2017'
