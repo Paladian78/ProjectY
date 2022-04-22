@@ -1,14 +1,6 @@
-# Configure the Microsoft Azure Provider
-provider "azurerm" {
-    subscription_id = "xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-    client_id      = "xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-    client_secret  = "xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-    tenant_id      = "xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-}
-
-# Create a resource group if it does not exist
+# Create a resource group if it doesn't exist.
 resource "azurerm_resource_group" "myterraformgroup" {
-    name    = "myResourceGroup"
+    name    = "terraform-rg2"
     location = "eastus"
 
     tags {
@@ -138,14 +130,11 @@ resource "azurerm_virtual_machine" "myterraformvm" {
     os_profile {
         computer_name  = "myvm"
         admin_username = "azureuser"
+        admin_password = "Password0134!"
     }
 
     os_profile_linux_config {
-        disable_password_authentication = true
-        ssh_keys {
-            path    = "/home/azureuser/.ssh/authorized_keys"
-            key_data = "ssh-rsa AAAAB3Nz{snip}hwhqT9h"
-        }
+        disable_password_authentication = false
     }
 
     boot_diagnostics {
