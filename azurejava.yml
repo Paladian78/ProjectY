@@ -56,39 +56,39 @@ stages:
         sqlUsername: $(MySqlUserName)@$(MySqlServer)
         sqlPassword: $(MySqlPassword)
         sqlFile: '$(Build.SourcesDirectory)/CreateMYSQLDB.sql'
-- stage: Deploy
-  displayName: 'Deploy Web App'
-  dependsOn: Build
-  condition: succeeded()
-  jobs:
-  - deployment: DeploymentJob
-    pool:
-      vmImage: $(vmImageName)
-    environment: java-container
-    variables:
-    - group: Release
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - task: AzureWebAppContainer@1
-            displayName: Update the web app with the new container
-            inputs:
-              appName: $(WebAppName)
-              azureSubscription: 'Azure Connection'
-              imageName: $(RegistryName)/$(webRepository):$(build.buildId)
-          - task: AzureAppServiceSettings@1
-            displayName: Update web app connection string
-            inputs:
-              azureSubscription: 'Azure Connection'
-              appName: $(WebAppName)
-              resourceGroupName: 'java-containers-cicd-rg'
-              connectionStrings: |
-                [
-                  {
-                    "name": "MyShuttleDb",
-                    "value": "jdbc:mysql://$(MySqlServer).mysql.database.azure.com:3306/alm?useSSL=true&requireSSL=false&autoReconnect=true&user=$(MySqlUserName)@$(MySqlServer)&password=$(MySqlPassword)",
-                    "type": "MySql",
-                    "slotSetting": false
-                  }
-                ]
+# - stage: Deploy
+#   displayName: 'Deploy Web App'
+#   dependsOn: Build
+#   condition: succeeded()
+#   jobs:
+#   - deployment: DeploymentJob
+#     pool:
+#       vmImage: $(vmImageName)
+#     environment: java-container
+#     variables:
+#     - group: Release
+#     strategy:
+#       runOnce:
+#         deploy:
+#           steps:
+#           - task: AzureWebAppContainer@1
+#             displayName: Update the web app with the new container
+#             inputs:
+#               appName: $(WebAppName)
+#               azureSubscription: 'Azure Connection'
+#               imageName: $(RegistryName)/$(webRepository):$(build.buildId)
+#           - task: AzureAppServiceSettings@1
+#             displayName: Update web app connection string
+#             inputs:
+#               azureSubscription: 'Azure Connection'
+#               appName: $(WebAppName)
+#               resourceGroupName: 'java-containers-cicd-rg'
+#               connectionStrings: |
+#                 [
+#                   {
+#                     "name": "MyShuttleDb",
+#                     "value": "jdbc:mysql://$(MySqlServer).mysql.database.azure.com:3306/alm?useSSL=true&requireSSL=false&autoReconnect=true&user=$(MySqlUserName)@$(MySqlServer)&password=$(MySqlPassword)",
+#                     "type": "MySql",
+#                     "slotSetting": false
+#                   }
+#                 ]
