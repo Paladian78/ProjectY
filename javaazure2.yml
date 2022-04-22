@@ -62,8 +62,8 @@ stages:
       - task: AzureRmWebAppDeployment@4
         inputs:
           ConnectionType: 'AzureRM'
-          azureSubscription: 'Azure for Students (436162f6-b6cc-428a-b63f-051713bc6121)'
+          azureSubscription: 'Azure for Students (03951b14-d082-4bfd-b04c-d7512e31610c)'
           appType: 'webAppLinux'
-          WebAppName: 'java21042022'
+          WebAppName: 'nodejs-dploy'
           packageForLinux: '/home/vsts/work/1/a/**/target/*.?(war|jar)'
           RuntimeStack: 'JAVA|17-java17'
