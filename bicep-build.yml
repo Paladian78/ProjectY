@@ -16,5 +16,5 @@ jobs:
         az deployment group create \
           --name $(Build.BuildNumber) \
           --resource-group $(ResourceGroupName) \
-          --template-file main.bicep \
+          --template-file deploy/main.bicep \
           --parameters environmentType=$(EnvironmentType) deployToyManualsStorageAccount=$(DeployToyManualsStorageAccount)
