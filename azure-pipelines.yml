@@ -11,7 +11,7 @@ variables:
   resourceGroupName: 'azinsider_demo'
   location: 'eastus'
   templateFile: 'Allfiles/Labs/04/main.bicep'
-  azureServiceConnection: 'az104-service-connection'
+  azureServiceConnection: 'bicep_deploy'
   adminUsername: 'Student'
 
 pool:
