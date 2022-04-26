@@ -1,4 +1,4 @@
-trigger: none
+trigger: bicep
 
 pool:
   vmImage: ubuntu-latest
@@ -16,5 +16,5 @@ jobs:
         az deployment group create \
           --name $(Build.BuildNumber) \
           --resource-group $(ResourceGroupName) \
-          --template-file deploy/main.bicep \
+          --template-file ./main.bicep \
           --parameters environmentType=$(EnvironmentType) deployToyManualsStorageAccount=$(DeployToyManualsStorageAccount)
